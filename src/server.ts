@@ -12,7 +12,6 @@ const pool = new Pool({
 });
 
 
-
 const initDB = async ()=>{
   try {
     await pool.query(`
@@ -59,7 +58,7 @@ app.post('/api/users', async(req:Request, res: Response)=>{
     `, [name, email, password, age])
     console.log(result)
   res.status(201).json({
-    message:"Created",
+    message:"C",
     data:{
       name,
       email,
@@ -68,6 +67,7 @@ app.post('/api/users', async(req:Request, res: Response)=>{
     }
   })
 });
+
 
 // get api get all users
 app.get('/api/users', async(req:Request, res: Response)=>{
@@ -86,6 +86,24 @@ app.get('/api/users', async(req:Request, res: Response)=>{
     })
   }
 });
+// updated data
+// put api
+app.put('/api/users/:id', async(req: Request, res:Response)=>{
+  const {id} = req.params;
+  const {name, password, age, is_active} = req.body;
+  console.log({name, password, age, is_active});
+
+  try {
+    const result = pool.query(`
+      UPDATE users set name=$1, password=$2, age=$3, is_active=$4
+      WHERE id=$5 
+      `, [name, password, age, is_active, id])
+      console.log(result)
+  } catch (error) {
+    
+  }
+});
+
 // get single data get api
 app.get('/api/users/:id', async(req : Request, res : Response)=>{
     const {id} = req.params;
@@ -98,7 +116,7 @@ app.get('/api/users/:id', async(req : Request, res : Response)=>{
       `, [id]
     )
      if(result.rows.length === 0){
-    res.status(500).json({
+    res.status(404).json({
       success:false,
       message:"User not found",
       data:{},
@@ -119,6 +137,7 @@ app.get('/api/users/:id', async(req : Request, res : Response)=>{
   }
 
 });
+
 
 // post api
 
