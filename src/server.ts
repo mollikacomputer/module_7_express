@@ -1,17 +1,17 @@
 import express, { type Application, type Request, type Response } from 'express'
 import {Pool} from 'pg'
-import config from './config';
+import config from './config/indexxxx';
 const app :Application= express();
-// const port = 5000;
-const port = config.port;
+const port = 5000;
+// const port = config.port;
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({extended:true}));
 
 const pool = new Pool({
-  connectionString:config.connection_string,
-  // connectionString:"postgresql://neondb_owner:npg_s5fkG7AoNBVY@ep-quiet-surf-ap15ybnl-pooler.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+  // connectionString: config.connection_string,
+  connectionString:"postgresql://neondb_owner:npg_s5fkG7AoNBVY@ep-quiet-surf-ap15ybnl-pooler.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 });
 
 
@@ -49,6 +49,7 @@ initDB();
 
 app.get('/', (req : Request, res : Response) => {
   res.send({'message': 'Express server', 'Author':'Mollika Computer'})
+  console.log("home page console log")
 });
 
 //2 post api get a single post
@@ -60,8 +61,9 @@ app.post('/api/users', async(req:Request, res: Response)=>{
     INSERT INTO users(name, email, password, age) VALUES($1,$2,$3,$4) RETURNING *
     `, [name, email, password, age])
     console.log(result)
+    console.log("home post api hit ")
   res.status(201).json({
-    message:"C",
+    message:"Create user successfully",
     data:{
       name,
       email,
@@ -192,8 +194,6 @@ app.get('/api/users/:id', async(req : Request, res : Response)=>{
 
 });
 
-
-// post api
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
